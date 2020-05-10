@@ -1,17 +1,14 @@
 package in.tap.base.spark.main
 
-import in.tap.base.spark.Job
-import in.tap.base.spark.main.Args._
+import in.tap.base.spark.io.{In, Out}
+import in.tap.base.spark.jobs.composite.CompositeJob
+import in.tap.base.spark.main.InArgs.{OneInArgs, ThreeInArgs, TwoInArgs}
+import in.tap.base.spark.main.OutArgs.{OneOutArgs, TwoOutArgs}
 import org.apache.spark.sql.SparkSession
 
 trait Main {
 
-  def job(
-    oneInOneOutArgs: OneInOneOutArgs,
-    twoInOneOutArgs: TwoInOneOutArgs,
-    threeInOneOutArgs: ThreeInOneOutArgs,
-    step: String
-  ): Job
+  def job(step: String, inArgs: InArgs, outArgs: OutArgs): CompositeJob
 
   def main(args: Array[String]): Unit = {
     val parser: ArgsParser = {
@@ -29,19 +26,45 @@ trait Main {
         .getOrCreate()
     }
 
-    lazy val oneIn: OneInOneOutArgs = {
-      OneInOneOutArgs(in1 = parser.in1(), out = parser.out())
+    val inPaths: (String, Option[String], Option[String]) = {
+      (parser.in1(), parser.in2.toOption, parser.in3.toOption)
     }
 
-    lazy val twoIn: TwoInOneOutArgs = {
-      TwoInOneOutArgs(in1 = parser.in1(), in2 = parser.in2(), out = parser.out())
+    val inFormats: (String, Option[String], Option[String]) = {
+      (parser.in1Format(), parser.in2Format.toOption, parser.in3Format.toOption)
     }
 
-    lazy val threeIn: ThreeInOneOutArgs = {
-      ThreeInOneOutArgs(in1 = parser.in1(), in2 = parser.in2(), in3 = parser.in3(), out = parser.out())
+    val outPaths: (String, Option[String]) = {
+      (parser.out1(), parser.out2.toOption)
     }
 
-    job(oneIn, twoIn, threeIn, parser.step()).run()
+    val outFormats: (String, Option[String]) = {
+      (parser.out1Format(), parser.out2Format.toOption)
+    }
+
+    val step: String = {
+      parser.step()
+    }
+
+    val inArgs: InArgs = (inPaths, inFormats) match {
+      case ((in1, Some(in2), Some(in3)), (f1, Some(f2), Some(f3))) => ThreeInArgs(In(in1, f1), In(in2, f2), In(in3, f3))
+      case ((_, Some(_), Some(_)), _)                              => throw missingFormatError
+      case ((in1, Some(in2), _), (f1, Some(f2), _))                => TwoInArgs(In(in1, f1), In(in2, f2))
+      case ((_, Some(_), _), (_, None, _))                         => throw missingFormatError
+      case ((in1, None, None), (f1, None, None))                   => OneInArgs(In(in1, f1))
+    }
+
+    val outArgs: OutArgs = (outPaths, outFormats) match {
+      case ((out1, Some(out2)), (f1, Some(f2))) => TwoOutArgs(Out(out1, f1), Out(out2, f2))
+      case ((_, Some(_)), _)                    => throw missingFormatError
+      case ((out1, None), (f1, _))              => OneOutArgs(Out(out1, f1))
+    }
+
+    job(step, inArgs, outArgs).execute
+  }
+
+  private lazy val missingFormatError: MatchError = {
+    new MatchError("A Format is required for Each Path.")
   }
 
 }
