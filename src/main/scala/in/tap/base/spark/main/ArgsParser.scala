@@ -1,4 +1,4 @@
-package in.tap.base.spark
+package in.tap.base.spark.main
 
 import org.rogach.scallop.{ScallopConf, ScallopOption}
 

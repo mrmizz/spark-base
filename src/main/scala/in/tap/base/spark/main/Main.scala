@@ -1,6 +1,7 @@
-package in.tap.base.spark
+package in.tap.base.spark.main
 
-import in.tap.base.spark.Args.{OneInOneOutArgs, ThreeInOneOutArgs, TwoInOneOutArgs}
+import in.tap.base.spark.Job
+import in.tap.base.spark.main.Args._
 import org.apache.spark.sql.SparkSession
 
 trait Main {
