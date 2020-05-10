@@ -5,7 +5,7 @@ description := "build your spark project on top of this."
 
 publishMavenStyle := true
 
-scalaVersion := "2.11.12"
+scalaVersion := "2.12.8"
 
 scalacOptions ++= Seq(
   "-encoding",
@@ -25,8 +25,7 @@ libraryDependencies ++= Seq(
   // arg parser
   "org.rogach" %% "scallop" % "3.1.5",
   // test resources
-  "org.scalactic" % "scalactic_2.11" % "3.0.4",
-  "org.scalatest" % "scalatest_2.11" % "3.0.4",
+  "org.scalatest" %% "scalatest" % "3.0.4",
   // apache spark
   "org.apache.spark" %% "spark-core" % versionSpark % Provided,
   "org.apache.spark" %% "spark-sql" % versionSpark % Provided
