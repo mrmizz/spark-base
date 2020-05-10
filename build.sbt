@@ -1,6 +1,6 @@
 name := "spark-base"
 organization := "in.tap"
-version := "0.0.1"
+version := "1.0.0-SNAPSHOT"
 description := "build your spark project on top of this."
 
 publishMavenStyle := true
