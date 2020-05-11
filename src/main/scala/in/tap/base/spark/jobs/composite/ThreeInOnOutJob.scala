@@ -10,14 +10,15 @@ abstract class ThreeInOnOutJob[A, B, C, D](inArgs: ThreeInArgs, outArgs: OneOutA
   implicit
   encoderA: Encoder[A],
   encoderB: Encoder[B],
-  encoderC: Encoder[C]
+  encoderC: Encoder[C],
+  spark: SparkSession
 ) extends CompositeJob(inArgs, outArgs)
     with ThreeInJob[A, B, C]
     with OneOutJob[D] {
 
   def transform(input: (Dataset[A], Dataset[B], Dataset[C])): Dataset[D]
 
-  override final def execute(implicit spark: SparkSession): Unit = {
+  override final def execute(): Unit = {
     write(transform(read))
   }
 

@@ -9,14 +9,15 @@ import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
 abstract class TwoInOneOutJob[A, B, C](inArgs: TwoInArgs, outArgs: OneOutArgs)(
   implicit
   encoderA: Encoder[A],
-  encoderB: Encoder[B]
+  encoderB: Encoder[B],
+  spark: SparkSession
 ) extends CompositeJob(inArgs, outArgs)
     with TwoInJob[A, B]
     with OneOutJob[C] {
 
   def transform(input: (Dataset[A], Dataset[B])): Dataset[C]
 
-  override final def execute(implicit spark: SparkSession): Unit = {
+  override final def execute(): Unit = {
     write(transform(read))
   }
 
