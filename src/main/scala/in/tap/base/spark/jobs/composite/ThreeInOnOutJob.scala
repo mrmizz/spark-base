@@ -4,14 +4,10 @@ import in.tap.base.spark.jobs.in.ThreeInJob
 import in.tap.base.spark.jobs.out.OneOutJob
 import in.tap.base.spark.main.InArgs.ThreeInArgs
 import in.tap.base.spark.main.OutArgs.OneOutArgs
-import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
+import org.apache.spark.sql.{Dataset, SparkSession}
 
-abstract class ThreeInOnOutJob[A, B, C, D](inArgs: ThreeInArgs, outArgs: OneOutArgs)(
-  implicit
-  encoderA: Encoder[A],
-  encoderB: Encoder[B],
-  encoderC: Encoder[C],
-  spark: SparkSession
+abstract class ThreeInOnOutJob[A <: Product, B <: Product, C <: Product, D](inArgs: ThreeInArgs, outArgs: OneOutArgs)(
+  implicit spark: SparkSession
 ) extends CompositeJob(inArgs, outArgs)
     with ThreeInJob[A, B, C]
     with OneOutJob[D] {

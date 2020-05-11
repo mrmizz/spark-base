@@ -8,7 +8,7 @@ import org.apache.spark.sql.SparkSession
 
 trait Main {
 
-  def job(step: String, inArgs: InArgs, outArgs: OutArgs): CompositeJob
+  def job(step: String, inArgs: InArgs, outArgs: OutArgs)(implicit spark: SparkSession): CompositeJob
 
   def main(args: Array[String]): Unit = {
     val parser: ArgsParser = {
@@ -60,7 +60,7 @@ trait Main {
       case ((out1, None), (f1, _))              => OneOutArgs(Out(out1, f1))
     }
 
-    job(step, inArgs, outArgs).execute
+    job(step, inArgs, outArgs).execute()
   }
 
   private lazy val missingFormatError: MatchError = {

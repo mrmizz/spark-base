@@ -4,13 +4,10 @@ import in.tap.base.spark.jobs.in.TwoInJob
 import in.tap.base.spark.jobs.out.TwoOutJob
 import in.tap.base.spark.main.InArgs.TwoInArgs
 import in.tap.base.spark.main.OutArgs.TwoOutArgs
-import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
+import org.apache.spark.sql.{Dataset, SparkSession}
 
-abstract class TwoInTwoOutJob[A, B, C, D](inArgs: TwoInArgs, outArgs: TwoOutArgs)(
-  implicit
-  encoderA: Encoder[A],
-  encoderB: Encoder[B],
-  spark: SparkSession
+abstract class TwoInTwoOutJob[A <: Product, B <: Product, C, D](inArgs: TwoInArgs, outArgs: TwoOutArgs)(
+  implicit spark: SparkSession
 ) extends CompositeJob(inArgs, outArgs)
     with TwoInJob[A, B]
     with TwoOutJob[C, D] {

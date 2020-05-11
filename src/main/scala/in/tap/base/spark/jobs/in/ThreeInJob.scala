@@ -1,18 +1,34 @@
 package in.tap.base.spark.jobs.in
 
 import in.tap.base.spark.main.InArgs.ThreeInArgs
-import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
+import org.apache.spark.sql.{Dataset, Encoder, Encoders, SparkSession}
 
-trait ThreeInJob[A, B, C] {
+import scala.reflect.runtime.universe.TypeTag
+
+trait ThreeInJob[A <: Product, B <: Product, C <: Product] {
 
   val inArgs: ThreeInArgs
 
+  implicit val encoderA: Encoder[A] = {
+    Encoders.product[A]
+  }
+
+  implicit val encoderB: Encoder[B] = {
+    Encoders.product[B]
+  }
+
+  implicit val encoderC: Encoder[C] = {
+    Encoders.product[C]
+  }
+
+  implicit val typeTagA: TypeTag[A]
+
+  implicit val typeTagB: TypeTag[B]
+
+  implicit val typeTagC: TypeTag[C]
+
   def read(
-    implicit
-    spark: SparkSession,
-    encoderA: Encoder[A],
-    encoderB: Encoder[B],
-    encoderC: Encoder[C]
+    implicit spark: SparkSession
   ): (Dataset[A], Dataset[B], Dataset[C]) = {
     val dsA: Dataset[A] = {
       spark.read

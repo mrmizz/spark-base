@@ -1,13 +1,27 @@
 package in.tap.base.spark.jobs.in
 
 import in.tap.base.spark.main.InArgs.TwoInArgs
-import org.apache.spark.sql.{Dataset, Encoder, SparkSession}
+import org.apache.spark.sql.{Dataset, Encoder, Encoders, SparkSession}
 
-trait TwoInJob[A, B] {
+import scala.reflect.runtime.universe.TypeTag
+
+trait TwoInJob[A <: Product, B <: Product] {
 
   val inArgs: TwoInArgs
 
-  def read(implicit spark: SparkSession, encoderA: Encoder[A], encoderB: Encoder[B]): (Dataset[A], Dataset[B]) = {
+  implicit val encoderA: Encoder[A] = {
+    Encoders.product[A]
+  }
+
+  implicit val encoderB: Encoder[B] = {
+    Encoders.product[B]
+  }
+
+  implicit val typeTagA: TypeTag[A]
+
+  implicit val typeTagB: TypeTag[B]
+
+  def read(implicit spark: SparkSession): (Dataset[A], Dataset[B]) = {
     val dsA: Dataset[A] = {
       spark.read
         .format(inArgs.in1.format)
