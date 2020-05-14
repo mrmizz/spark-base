@@ -5,7 +5,7 @@ description := "build your spark project on top of this."
 
 publishMavenStyle := true
 
-scalaVersion := "2.12.8"
+scalaVersion := "2.11.12"
 
 scalacOptions ++= Seq(
   "-encoding",
