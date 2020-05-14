@@ -1,11 +1,25 @@
 package in.tap.base.spark.jobs.out
 
 import in.tap.base.spark.main.OutArgs.TwoOutArgs
-import org.apache.spark.sql.{Dataset, SaveMode}
+import org.apache.spark.sql.{Dataset, Encoder, Encoders, SaveMode}
 
-trait TwoOutJob[A, B] {
+import scala.reflect.runtime.universe.TypeTag
+
+trait TwoOutJob[A <: Product, B <: Product] {
 
   val outArgs: TwoOutArgs
+
+  implicit val writeEncoderA: Encoder[A] = {
+    Encoders.product[A]
+  }
+
+  implicit val writeEncoderB: Encoder[B] = {
+    Encoders.product[B]
+  }
+
+  implicit val writeTypeTagA: TypeTag[A]
+
+  implicit val writeTypeTagB: TypeTag[B]
 
   def write(ds1: Dataset[A], ds2: Dataset[B]): Unit = {
     ds1.write

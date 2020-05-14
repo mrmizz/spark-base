@@ -6,7 +6,7 @@ import in.tap.base.spark.main.InArgs.OneInArgs
 import in.tap.base.spark.main.OutArgs.TwoOutArgs
 import org.apache.spark.sql.{Dataset, SparkSession}
 
-abstract class OneInTwoOutJob[A <: Product, B, C](inArgs: OneInArgs, outArgs: TwoOutArgs)(
+abstract class OneInTwoOutJob[A <: Product, B <: Product, C <: Product](inArgs: OneInArgs, outArgs: TwoOutArgs)(
   implicit spark: SparkSession
 ) extends CompositeJob(inArgs, outArgs)
     with OneInJob[A]

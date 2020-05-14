@@ -6,7 +6,7 @@ import in.tap.base.spark.main.InArgs.ThreeInArgs
 import in.tap.base.spark.main.OutArgs.TwoOutArgs
 import org.apache.spark.sql.{Dataset, SparkSession}
 
-abstract class ThreeInTwoOutJob[A <: Product, B <: Product, C <: Product, D, E](
+abstract class ThreeInTwoOutJob[A <: Product, B <: Product, C <: Product, D <: Product, E <: Product](
   inArgs: ThreeInArgs,
   outArgs: TwoOutArgs
 )(

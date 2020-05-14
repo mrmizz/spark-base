@@ -9,11 +9,11 @@ trait OneInJob[A <: Product] {
 
   val inArgs: OneInArgs
 
-  implicit val encoder: Encoder[A] = {
+  implicit val readEncoderA: Encoder[A] = {
     Encoders.product[A]
   }
 
-  implicit val typeTag: TypeTag[A]
+  implicit val readTypeTagA: TypeTag[A]
 
   def read(implicit spark: SparkSession): Dataset[A] = {
     spark.read

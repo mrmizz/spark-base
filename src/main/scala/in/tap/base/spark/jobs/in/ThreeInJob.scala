@@ -9,23 +9,23 @@ trait ThreeInJob[A <: Product, B <: Product, C <: Product] {
 
   val inArgs: ThreeInArgs
 
-  implicit val encoderA: Encoder[A] = {
+  implicit val readEncoderA: Encoder[A] = {
     Encoders.product[A]
   }
 
-  implicit val encoderB: Encoder[B] = {
+  implicit val readEncoderB: Encoder[B] = {
     Encoders.product[B]
   }
 
-  implicit val encoderC: Encoder[C] = {
+  implicit val readEncoderC: Encoder[C] = {
     Encoders.product[C]
   }
 
-  implicit val typeTagA: TypeTag[A]
+  implicit val readTypeTagA: TypeTag[A]
 
-  implicit val typeTagB: TypeTag[B]
+  implicit val readTypeTagB: TypeTag[B]
 
-  implicit val typeTagC: TypeTag[C]
+  implicit val readTypeTagC: TypeTag[C]
 
   def read(
     implicit spark: SparkSession

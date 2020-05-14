@@ -9,17 +9,17 @@ trait TwoInJob[A <: Product, B <: Product] {
 
   val inArgs: TwoInArgs
 
-  implicit val encoderA: Encoder[A] = {
+  implicit val readEncoderA: Encoder[A] = {
     Encoders.product[A]
   }
 
-  implicit val encoderB: Encoder[B] = {
+  implicit val readEncoderB: Encoder[B] = {
     Encoders.product[B]
   }
 
-  implicit val typeTagA: TypeTag[A]
+  implicit val readTypeTagA: TypeTag[A]
 
-  implicit val typeTagB: TypeTag[B]
+  implicit val readTypeTagB: TypeTag[B]
 
   def read(implicit spark: SparkSession): (Dataset[A], Dataset[B]) = {
     val dsA: Dataset[A] = {

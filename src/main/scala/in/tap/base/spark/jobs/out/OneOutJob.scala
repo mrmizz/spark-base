@@ -1,11 +1,19 @@
 package in.tap.base.spark.jobs.out
 
 import in.tap.base.spark.main.OutArgs.OneOutArgs
-import org.apache.spark.sql.{Dataset, SaveMode}
+import org.apache.spark.sql.{Dataset, Encoder, Encoders, SaveMode}
 
-trait OneOutJob[A] {
+import scala.reflect.runtime.universe.TypeTag
+
+trait OneOutJob[A <: Product] {
 
   val outArgs: OneOutArgs
+
+  implicit val writeEncoderA: Encoder[A] = {
+    Encoders.product[A]
+  }
+
+  implicit val writeTypeTagA: TypeTag[A]
 
   def write(ds: Dataset[A]): Unit = {
     ds.write

@@ -6,7 +6,10 @@ import in.tap.base.spark.main.InArgs.ThreeInArgs
 import in.tap.base.spark.main.OutArgs.OneOutArgs
 import org.apache.spark.sql.{Dataset, SparkSession}
 
-abstract class ThreeInOnOutJob[A <: Product, B <: Product, C <: Product, D](inArgs: ThreeInArgs, outArgs: OneOutArgs)(
+abstract class ThreeInOnOutJob[A <: Product, B <: Product, C <: Product, D <: Product](
+  inArgs: ThreeInArgs,
+  outArgs: OneOutArgs
+)(
   implicit spark: SparkSession
 ) extends CompositeJob(inArgs, outArgs)
     with ThreeInJob[A, B, C]
