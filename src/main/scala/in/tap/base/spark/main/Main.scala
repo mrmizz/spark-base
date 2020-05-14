@@ -21,7 +21,7 @@ trait Main {
 
     implicit val spark: SparkSession = {
       SparkSession.builder
-        .appName("Wiki")
+        .appName("MySparkApp")
         .master("local[*]")
         .getOrCreate()
     }
