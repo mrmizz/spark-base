@@ -1,4 +1,4 @@
-package in.tap.base.spark.jobs.out
+package in.tap.base.spark.jobs.out.dataset
 
 import in.tap.base.spark.main.OutArgs.TwoOutArgs
 import org.apache.spark.sql.{Dataset, Encoder, Encoders, SaveMode}

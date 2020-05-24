@@ -1,7 +1,7 @@
 package in.tap.base.spark.jobs.composite
 
-import in.tap.base.spark.jobs.in.ThreeInJob
-import in.tap.base.spark.jobs.out.TwoOutJob
+import in.tap.base.spark.jobs.in.dataset.ThreeInJob
+import in.tap.base.spark.jobs.out.dataset.TwoOutJob
 import in.tap.base.spark.main.InArgs.ThreeInArgs
 import in.tap.base.spark.main.OutArgs.TwoOutArgs
 import org.apache.spark.sql.{Dataset, SparkSession}

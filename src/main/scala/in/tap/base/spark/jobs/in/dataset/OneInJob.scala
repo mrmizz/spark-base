@@ -1,4 +1,4 @@
-package in.tap.base.spark.jobs.in
+package in.tap.base.spark.jobs.in.dataset
 
 import in.tap.base.spark.main.InArgs.OneInArgs
 import org.apache.spark.sql.{Dataset, Encoder, Encoders, SparkSession}

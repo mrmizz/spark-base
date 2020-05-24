@@ -1,13 +1,13 @@
-package in.tap.base.spark.jobs.in
+package in.tap.base.spark.jobs.in.dataset
 
-import in.tap.base.spark.main.InArgs.ThreeInArgs
+import in.tap.base.spark.main.InArgs.TwoInArgs
 import org.apache.spark.sql.{Dataset, Encoder, Encoders, SparkSession}
 
 import scala.reflect.runtime.universe.TypeTag
 
-trait ThreeInJob[A <: Product, B <: Product, C <: Product] {
+trait TwoInJob[A <: Product, B <: Product] {
 
-  val inArgs: ThreeInArgs
+  val inArgs: TwoInArgs
 
   implicit val readEncoderA: Encoder[A] = {
     Encoders.product[A]
@@ -17,19 +17,11 @@ trait ThreeInJob[A <: Product, B <: Product, C <: Product] {
     Encoders.product[B]
   }
 
-  implicit val readEncoderC: Encoder[C] = {
-    Encoders.product[C]
-  }
-
   implicit val readTypeTagA: TypeTag[A]
 
   implicit val readTypeTagB: TypeTag[B]
 
-  implicit val readTypeTagC: TypeTag[C]
-
-  def read(
-    implicit spark: SparkSession
-  ): (Dataset[A], Dataset[B], Dataset[C]) = {
+  def read(implicit spark: SparkSession): (Dataset[A], Dataset[B]) = {
     val dsA: Dataset[A] = {
       spark.read
         .format(inArgs.in1.format)
@@ -44,14 +36,7 @@ trait ThreeInJob[A <: Product, B <: Product, C <: Product] {
         .as[B]
     }
 
-    val dsC: Dataset[C] = {
-      spark.read
-        .format(inArgs.in3.format)
-        .load(inArgs.in3.path)
-        .as[C]
-    }
-
-    (dsA, dsB, dsC)
+    dsA -> dsB
   }
 
 }
