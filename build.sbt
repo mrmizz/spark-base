@@ -28,5 +28,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.4",
   // apache spark
   "org.apache.spark" %% "spark-core" % versionSpark % Provided,
-  "org.apache.spark" %% "spark-sql" % versionSpark % Provided
+  "org.apache.spark" %% "spark-sql" % versionSpark % Provided,
+  // dynamo connector
+  "com.audienceproject" %% "spark-dynamodb" % "1.0.4"
 )
